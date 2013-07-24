@@ -5,6 +5,7 @@ import java.util.Arrays;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.conf.Configured;
+import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.Text;
@@ -37,6 +38,16 @@ public class ItemizedBilling extends Configured implements Tool
         Path outputPath = new Path(args[1]);
 
         Configuration conf = getConf();
+        
+        //Initialize new abstract Hadoop FileSystem
+        FileSystem fs = FileSystem.get(conf);
+        
+       
+          //Check if file doesn't exist
+          if (fs.exists(outputPath)) {
+            // if file exist, remove file first
+            fs.delete(outputPath);
+          }
 
         Job job = new Job(conf, getClass().getName() + "--Basheeruddin"); // TODO
         job.setJarByClass(ItemizedBilling.class);

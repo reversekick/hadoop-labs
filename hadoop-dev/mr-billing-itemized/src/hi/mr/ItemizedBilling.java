@@ -38,7 +38,7 @@ public class ItemizedBilling extends Configured implements Tool
 
         Configuration conf = getConf();
 
-        Job job = new Job(conf, getClass().getName() + "--<your_name>"); // TODO
+        Job job = new Job(conf, getClass().getName() + "--Basheeruddin"); // TODO
         job.setJarByClass(ItemizedBilling.class);
         job.setMapperClass(MyMapper.class);
         job.setReducerClass(MyReducer.class);
@@ -72,9 +72,9 @@ public class ItemizedBilling extends Configured implements Tool
                 int cost = Integer.parseInt(costStr);
 
                 // TODO
-//                Text keyOutCustomerResource = new Text (customer + "_" + resource)
-//                IntWritable valueOutCost = new IntWritable(?);
-                // context.write(keyOutCustomerResource, valueOutCost);
+               Text keyOutCustomerResource = new Text (customerIdStr + "_" + resourceStr);
+               IntWritable valueOutCost = new IntWritable(cost);
+               context.write(keyOutCustomerResource, valueOutCost);
 
             } catch (Exception e)
             {
@@ -94,8 +94,7 @@ public class ItemizedBilling extends Configured implements Tool
             int total = 0;
             for (IntWritable cost : results)
             {
-                // TODO
-                // add up all the costs
+                total += cost.get();
             }
             context.write(key, new IntWritable(total));
 

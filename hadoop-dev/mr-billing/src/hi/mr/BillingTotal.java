@@ -38,7 +38,7 @@ public class BillingTotal extends Configured implements Tool
 
         Configuration conf = getConf();
 
-        Job job = new Job(conf, getClass().getName() + "--<your_name>"); // TODO
+        Job job = new Job(conf, getClass().getName() + "syedbahm"); // TODO
         job.setJarByClass(BillingTotal.class);
         job.setMapperClass(MyMapper.class);
         job.setReducerClass(MyReducer.class);
@@ -71,9 +71,9 @@ public class BillingTotal extends Configured implements Tool
                 int cost = Integer.parseInt(costStr);
 
                 // TODO
-//                Text keyOutCustomer = new Text (?);
-//                IntWritable valueOutCost = new IntWritable(?);
-                // context.write(keyOutCustomer, valueOutCost);
+                Text keyOutCustomer = new Text (customerIdStr);
+                IntWritable valueOutCost = new IntWritable(cost);
+                context.write(keyOutCustomer, valueOutCost);
 
             } catch (Exception e)
             {
@@ -95,6 +95,7 @@ public class BillingTotal extends Configured implements Tool
             {
                 // TODO
                 // add up all the costs
+            	total += cost.get();
             }
             context.write(key, new IntWritable(total));
 

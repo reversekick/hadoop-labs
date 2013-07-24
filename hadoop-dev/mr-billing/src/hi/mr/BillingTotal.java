@@ -5,6 +5,7 @@ import java.util.Arrays;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.conf.Configured;
+import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.Text;
@@ -27,16 +28,31 @@ public class BillingTotal extends Configured implements Tool
     @Override
     public int run(String[] args) throws Exception
     {
-
+    	
+    	
+    	
         if (args.length != 2)
         {
             System.out.println("usage : need <input path>  <output path>");
             return 1;
         }
+        
+        
         Path inputPath = new Path(args[0]);
         Path outputPath = new Path(args[1]);
 
         Configuration conf = getConf();
+        
+      //Initialize new abstract Hadoop FileSystem
+        FileSystem fs = FileSystem.get(conf);
+        
+       
+          //Check if file doesn't exist
+          if (fs.exists(outputPath)) {
+            // if file exist, remove file first
+            fs.delete(outputPath);
+          }
+       
 
         Job job = new Job(conf, getClass().getName() + "syedbahm"); // TODO
         job.setJarByClass(BillingTotal.class);

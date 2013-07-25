@@ -1,7 +1,7 @@
 -- pig-billing.pig
 
 -- ## TODO : set the name of job
-SET job.name 'pig_billing_syedbahm';
+SET job.name 'pig_billing_syedbahm_by_total';
 
 
 -- Parse Input File
@@ -15,8 +15,8 @@ C =    GROUP B BY custid;
 DESCRIBE C;
 
 -- ## then sum cost
-D = FOREACH C GENERATE group, SUM(B.cost);
-
-STORE D INTO 'syedbahm2/billing/billing_out_many';
+D = FOREACH C GENERATE group, SUM(B.cost) as total;
+E = ORDER D by total DESC;
+STORE E INTO 'syedbahm2/billing/billing_out_spending';
 
 -- ## TODO : now process all the files (change LOAD example from sample.txt --> *.log)
